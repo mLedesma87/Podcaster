@@ -1,0 +1,15 @@
+.row {
+	margin-top:20px;
+	min-height: 200px;
+}
+
+.podcastCover {
+	border: 1px solid #efefef;
+	box-shadow: 2px 1px 3px #efefef;
+	text-align: center;
+	padding: 10px;
+}
+
+.podcastCover img {
+	margin-top: -20px;
+}
