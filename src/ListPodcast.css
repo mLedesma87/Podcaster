@@ -13,3 +13,10 @@
 .podcastCover img {
 	margin-top: -20px;
 }
+
+.badge {
+	min-width: 100px;
+	font-size: 1em;
+	padding: 8px;
+	margin-right: 5px;
+}

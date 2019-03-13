@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import lscache from 'lscache';
 import PodcastDetail from './PodcastDetail.js';
 import ContentEpisode from './ContentEpisode.js';
 import ListEpisode from './ListEpisode.js';
@@ -8,16 +7,12 @@ import {
   BrowserRouter as Router
 } from "react-router-dom";
 import './PodcastContent.css';
-import { Container, Row , Col , Image } from 'react-bootstrap';
+import { Container, Row , Col } from 'react-bootstrap';
 
 class PodcastContent extends Component {
 
-  constructor() {
-    super();
-  }
-
   componentWillMount() {
-
+    this.props.handler();
   }
 
   render () {
@@ -31,7 +26,7 @@ class PodcastContent extends Component {
             </Col>
             <Col md={9}>
             <div className="content">
-               <Route exact path="/podcast/:idPodcast" render={(props)=><ListEpisode {...props}/>}/>
+               <Route exact path="/podcast/:idPodcast" render={(props)=><ListEpisode {...props} handler={this.props.handler}/>}/>
                <Route path="/podcast/:idPodcast/episode/:episodeId" component={ContentEpisode}/>
             </div>
             </Col>

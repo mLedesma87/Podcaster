@@ -1,3 +1,11 @@
 body,html {
 	padding:1%;
 }
+
+.loader {
+  position: fixed;
+  top: 10;
+  right: 3em;
+  background: white;
+  z-index: 9999;
+}
