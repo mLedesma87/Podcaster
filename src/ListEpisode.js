@@ -17,8 +17,9 @@ class ListEpisode extends Component {
   }
 
   componentDidMount() {
-  	this.props.handler(true);
-  	var idPodcast = this.props.location.state.idPodcast;
+
+  	this.props.showLoading(true);
+  	var idPodcast = this.props.match.params.idPodcast;
 
   	var cacheInfo = lscache.get('listEpisodeInfo');
  	if (cacheInfo === null) {
@@ -30,7 +31,7 @@ class ListEpisode extends Component {
  		console.log(cacheInfoObj);
  		this.setState({trackInfo : cacheInfoObj.listTrack});
  		this.setState({trackCount : cacheInfoObj.num});
- 		this.props.handler(false);
+ 		this.props.showLoading(false);
  	}
   }
 
@@ -40,7 +41,6 @@ class ListEpisode extends Component {
 	 .then(data => {
 	 	this.setState({trackCount : data.results[0].trackCount});
 	 	var num = data.results[0].trackCount;
-
 		  	fetch('https://cors.io/?' + data.results[0].feedUrl)
 	         .then(response => response.text())
 	         .then(data => {
@@ -51,6 +51,7 @@ class ListEpisode extends Component {
 	           var arrPodcast = oDOM.documentElement.getElementsByTagName('item');
 	           for (var item of arrPodcast) {
 	             var obj = {};
+	             obj.idPod = idPodcast;
 	             for (var attr of item.children) {
 	               if (attr.localName === 'title') {
 	                 obj.title = attr.innerHTML;
@@ -61,36 +62,42 @@ class ListEpisode extends Component {
 	               if (attr.localName === 'duration') {
 	                 obj.duration = attr.innerHTML;
 	               }
+	               if (attr.localName === 'description'){
+	               	 obj.description = attr.innerHTML;
+	               }
+	               if (attr.localName === 'enclosure'){
+	               	 obj.podUrl = attr.attributes.url.value;
+	               }
 	             }
 
 	             arrtrackInfo.push(obj);
 	           }
 
 	           var listEpisode = {};
-	           if (lscache.get('listEpisodeInfo') != undefined) {
+	           if (lscache.get('listEpisodeInfo') !== null) {
 	           	listEpisode = lscache.get('listEpisodeInfo');	
 	           }
-	           var obj = {};
-	           obj.num = num;
-	           obj.listTrack = arrtrackInfo;
-	           listEpisode[idPodcast] = obj;
+	           var cacheObj = {};
+	           cacheObj.num = num;
+	           cacheObj.listTrack = arrtrackInfo;
+	           listEpisode[idPodcast] = cacheObj;
 
 	           lscache.set('listEpisodeInfo', listEpisode, 1440);
 
 	           this.setState({trackInfo : arrtrackInfo});
-	           this.props.handler(false);
+	           this.props.showLoading(false);
 	       });
 	  });
   }
 
   render() {
-
+  	console.log('render listEpisode');
     const lista = this.state.trackInfo.map(function(obj, index){
       return [(
-      	<tr>
-      		<Link key={index} to={{pathname: '/podcast/123/episode/245'}}>
-  				<td>{obj.title}</td>
-  			</Link>
+      	<tr key={index}>
+      		<td><Link key={index} to={{pathname: `/podcast/${obj.idPod}/episode/${index}`}}>
+  				{obj.title}
+  			</Link></td>
   			<td>{obj.pubDate}</td>
   			<td>{obj.duration}</td>
       	</tr>

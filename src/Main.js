@@ -16,11 +16,10 @@ class Main extends Component {
       isLoading: true
     }
     
-    this.handlerBind = this.handler.bind(this);
+    this.handlerBind = this.showLoading.bind(this);
   }
 
-  handler(flag) {
-    
+  showLoading(flag) {
     if (flag === undefined) flag = true;
      this.setState({
       isLoading: flag
@@ -28,6 +27,7 @@ class Main extends Component {
   }
 
   render() {
+    console.log('render main');
     return (
       <Router>
         <div>
@@ -42,8 +42,8 @@ class Main extends Component {
           </Nav>
           <hr/>
           <div className="content">
-            <Route exact path="/" render={(props)=><ListPodcast {...props} handler={this.handlerBind}/>}/>
-            <Route path="/podcast/:idPodcast" render={(props)=><PodcastContent {...props} handler={this.handlerBind}/>}/>
+            <Route exact path="/" render={(props)=><ListPodcast {...props} showLoading={this.handlerBind}/>}/>
+            <Route path="/podcast/:idPodcast" render={(props)=><PodcastContent {...props} showLoading={this.handlerBind}/>}/>
           </div>
         </div>
       </Router>

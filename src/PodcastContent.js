@@ -12,28 +12,29 @@ import { Container, Row , Col } from 'react-bootstrap';
 class PodcastContent extends Component {
 
   componentWillMount() {
-    this.props.handler();
+    this.props.showLoading(true);
   }
 
   render () {
+    console.log('render podcast content');
     return (
-      <Router>
+ 
         <div>
         <Container>
           <Row>
             <Col md={3}>
-            <PodcastDetail state={this.props.location.state} />
+            <PodcastDetail parentProps={this.props} />
             </Col>
             <Col md={9}>
             <div className="content">
-               <Route exact path="/podcast/:idPodcast" render={(props)=><ListEpisode {...props} handler={this.props.handler}/>}/>
-               <Route path="/podcast/:idPodcast/episode/:episodeId" component={ContentEpisode}/>
+               <Route exact path="/podcast/:idPodcast" render={(props)=><ListEpisode {...props} showLoading={this.props.showLoading}/>}/>
+               <Route path="/podcast/:idPodcast/episode/:idEpisode" render={(props)=><ContentEpisode {...props} showLoading={this.props.showLoading}/>}/>
             </div>
             </Col>
           </Row>
          </Container>
         </div>
-      </Router>
+
     );
   }
 }

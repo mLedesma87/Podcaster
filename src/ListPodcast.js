@@ -21,13 +21,13 @@ class ListPodcast extends Component {
     var podcastInfo = lscache.get('podcastInfo');
     if (podcastInfo) {
       this.setState({listPodcast : podcastInfo});
-      this.props.handler(false);
+      this.props.showLoading(false);
     } else {
       fetch('https://itunes.apple.com/us/rss/toppodcasts/limit=100/genre=1310/json')
         .then(response => response.json())
         .then(data => {
           this.setState({listPodcast : data.feed.entry});
-          this.props.handler(false);
+          this.props.showLoading(false);
           lscache.set('podcastInfo', data.feed.entry, 1440);
       });
     }
@@ -89,7 +89,7 @@ class ListPodcast extends Component {
     } else {
       filteredPodcastList = this.renderFilteredList(podcastList.listPodcast);
     }
-
+console.log('render lsitpodcast');
     return (
       <Container>
         <Nav className="justify-content-end">
