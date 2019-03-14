@@ -16,9 +16,7 @@ class PodcastContent extends Component {
   }
 
   render () {
-    console.log('render podcast content');
     return (
- 
         <div>
         <Container>
           <Row>
@@ -34,7 +32,6 @@ class PodcastContent extends Component {
           </Row>
          </Container>
         </div>
-
     );
   }
 }

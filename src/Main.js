@@ -27,7 +27,6 @@ class Main extends Component {
   }
 
   render() {
-    console.log('render main');
     return (
       <Router>
         <div>
@@ -40,7 +39,7 @@ class Main extends Component {
                 corners={1} className="spinner" /> : ""}
             </Nav.Item>
           </Nav>
-          <hr/>
+          <hr />
           <div className="content">
             <Route exact path="/" render={(props)=><ListPodcast {...props} showLoading={this.handlerBind}/>}/>
             <Route path="/podcast/:idPodcast" render={(props)=><PodcastContent {...props} showLoading={this.handlerBind}/>}/>

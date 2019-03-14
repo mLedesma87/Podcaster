@@ -5,6 +5,7 @@ import Loader from 'react-loader';
 import {
   Link
 } from "react-router-dom";
+import api from './podcastApi.js';
 
 class PodcastDetail extends Component {
 
@@ -15,41 +16,26 @@ class PodcastDetail extends Component {
     }
   }
 
-
   componentDidMount() {
-    console.log('did mount');
-    var id = this.props.parentProps.match.params.idPodcast;
- 
-    if (lscache.get('podcastInfo') == null) { 
-      fetch('https://itunes.apple.com/us/rss/toppodcasts/limit=100/genre=1310/json')
-        .then(response => response.json())
-        .then(data => {
-          lscache.set('podcastInfo', data.feed.entry, 1440);
-          this.getDataFromCache();
-      });
-    } else {
-      this.getDataFromCache();
-    }
-  }
 
-  getDataFromCache() {
     var id = this.props.parentProps.match.params.idPodcast;
-    var infoPodcast = [];
+    api.podcasts().getPodcastList(lscache)
+      .then(data => {
+          var id = this.props.parentProps.match.params.idPodcast;
+          var infoPodcast = [];
 
-    lscache.get('podcastInfo').forEach(function (itmPodcast, index){
-        if (itmPodcast['id']['attributes']['im:id'] === id) {
-          infoPodcast = itmPodcast;
-        }
-        console.log('get cache');
+          lscache.get('cachedListPodcasts').forEach((itmPodcast, index) => {
+              if (itmPodcast['id']['attributes']['im:id'] === id) {
+                infoPodcast = itmPodcast;
+              }
+            });
+          this.setState({podcastInfo : infoPodcast});
       });
-      console.log(infoPodcast);
-      console.log('this ' + this);
-      this.setState({podcastInfo : infoPodcast});
   }
 
   render () {
     var podcastInfo = this.state.podcastInfo;
-    console.log('render podcast detail');
+
     if (podcastInfo != null) {
       return (
         <Card>

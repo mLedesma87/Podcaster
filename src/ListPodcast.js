@@ -5,6 +5,7 @@ import {
 import './ListPodcast.css'
 import { Container, Row , Col , Image, Badge, Nav, Form, FormControl } from 'react-bootstrap';
 import lscache from 'lscache';
+import api from './podcastApi.js';
 
 class ListPodcast extends Component {
 
@@ -18,24 +19,17 @@ class ListPodcast extends Component {
   }
 
   componentWillMount() {
-    var podcastInfo = lscache.get('podcastInfo');
-    if (podcastInfo) {
-      this.setState({listPodcast : podcastInfo});
-      this.props.showLoading(false);
-    } else {
-      fetch('https://itunes.apple.com/us/rss/toppodcasts/limit=100/genre=1310/json')
-        .then(response => response.json())
-        .then(data => {
-          this.setState({listPodcast : data.feed.entry});
-          this.props.showLoading(false);
-          lscache.set('podcastInfo', data.feed.entry, 1440);
-      });
-    }
+    api.podcasts().getPodcastList(lscache)
+      .then(data => {
+        this.setState({listPodcast : data});
+        this.props.showLoading(false);
+    });
+    
   }
 
   filterList(event){
     var updatedList = this.state.listPodcast;
-    updatedList = updatedList.filter(function(item){
+    updatedList = updatedList.filter((item) => {
       return (item["im:artist"]['label'].toLowerCase().search(
         event.target.value.toLowerCase()) !== -1  || item["im:name"]['label'].toLowerCase().search(
         event.target.value.toLowerCase()) !== -1);
@@ -48,7 +42,7 @@ class ListPodcast extends Component {
     let groupByFour = [];
     let row = []
 
-    podcastList.forEach(function(a,id){
+    podcastList.forEach((a,id) => {
       id = id + 1;
       row.push(a);
       if (id%4===0 || id / 4 >= podcastList.length / 4) {
@@ -59,10 +53,10 @@ class ListPodcast extends Component {
 
     const col = [];
 
-    groupByFour.forEach(function (rowList, index){
+    groupByFour.forEach((rowList, index) => {
       const rowGrid = [];
       
-      rowList.map(function(rowItem, id){
+      rowList.map((rowItem, id) => {
         rowGrid.push(
           <Col sm={3} key={id}>
            <div className="podcastCover">
@@ -89,7 +83,9 @@ class ListPodcast extends Component {
     } else {
       filteredPodcastList = this.renderFilteredList(podcastList.listPodcast);
     }
+
 console.log('render lsitpodcast');
+    
     return (
       <Container>
         <Nav className="justify-content-end">
