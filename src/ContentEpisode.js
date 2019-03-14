@@ -3,9 +3,6 @@ import lscache from 'lscache';
 import { Card } from 'react-bootstrap';
 import parse from 'html-react-parser';
 import ReactAudioPlayer from 'react-audio-player';
-import {
-	Link
-} from "react-router-dom";
 
 class ContentEpisode extends Component {
 

@@ -60,7 +60,15 @@ class ListEpisode extends Component {
 	                 obj.pubDate = attr.innerHTML;
 	               }
 	               if (attr.localName === 'duration') {
-	                 obj.duration = attr.innerHTML;
+	                 if (attr.innerHTML.indexOf(':') > -1){
+	                 	obj.duration = attr.innerHTML;
+	                 } else {
+                 	    var measuredTime = new Date(null);
+					    measuredTime.setSeconds(parseInt(attr.innerHTML)); // specify value of SECONDS
+					    var MHSTime = measuredTime.toISOString().substr(11, 8);
+	                 	obj.duration = MHSTime;
+	                 }
+	                 
 	               }
 	               if (attr.localName === 'description'){
 	               	 obj.description = attr.innerHTML;
@@ -98,7 +106,7 @@ class ListEpisode extends Component {
       		<td><Link key={index} to={{pathname: `/podcast/${obj.idPod}/episode/${index}`}}>
   				{obj.title}
   			</Link></td>
-  			<td>{obj.pubDate}</td>
+  			<td>{new Date(obj.pubDate).toLocaleDateString()}</td>
   			<td>{obj.duration}</td>
       	</tr>
       )]

@@ -53,7 +53,6 @@ class PodcastDetail extends Component {
     if (podcastInfo != null) {
       return (
         <Card>
-             
              <Link to={{pathname: `/podcast/${podcastInfo['id']['attributes']['im:id']}`}}>
                <Card.Img variant="top" src={podcastInfo['im:image'][2]['label']}/>   
              </Link>             
