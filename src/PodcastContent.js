@@ -3,8 +3,7 @@ import PodcastDetail from './PodcastDetail.js';
 import ContentEpisode from './ContentEpisode.js';
 import ListEpisode from './ListEpisode.js';
 import {
-  Route,
-  BrowserRouter as Router
+  Route
 } from "react-router-dom";
 import './PodcastContent.css';
 import { Container, Row , Col } from 'react-bootstrap';

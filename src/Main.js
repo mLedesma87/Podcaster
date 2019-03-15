@@ -6,7 +6,8 @@ import {
 import { Nav } from 'react-bootstrap';
 import ListPodcast from './ListPodcast.js'
 import PodcastContent from './PodcastContent.js'
-import Loader from 'react-loader';
+import './Main.css';
+
  
 class Main extends Component {
   
@@ -15,7 +16,7 @@ class Main extends Component {
     this.state = {
       isLoading: true
     }
-    
+    //Bind loader state to able to change in children components
     this.handlerBind = this.showLoading.bind(this);
   }
 
@@ -34,9 +35,8 @@ class Main extends Component {
             <Nav.Item>
               <Nav.Link href="/"><h1>Podcaster</h1></Nav.Link>
             </Nav.Item>
-            <Nav.Item>
-              {this.state.isLoading ? <Loader lines={13} length={20} width={5} radius={10}
-                corners={1} className="spinner" /> : ""}
+            <Nav.Item className="spinnerContainer">
+              {this.state.isLoading ? <img alt="loader" src="/tail-spin.svg" /> : ""}
             </Nav.Item>
           </Nav>
           <hr />

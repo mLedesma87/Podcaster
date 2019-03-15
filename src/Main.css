@@ -2,10 +2,13 @@ body,html {
 	padding:1%;
 }
 
-.loader {
-  position: fixed;
-  top: 10;
-  right: 3em;
-  background: white;
-  z-index: 9999;
+.spinner {
+    top: 10% !important;
+    left:80% !important;
+}
+
+.spinnerContainer {
+	width: 65%;
+	text-align: right;
+	padding:1%;
 }

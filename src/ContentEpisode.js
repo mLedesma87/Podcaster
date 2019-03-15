@@ -10,7 +10,10 @@ class ContentEpisode extends Component {
   constructor() {
   	super();
   	this.state = {
-  		objEpisode : {}
+  		objEpisode : {
+  			title : "",
+  			podUrl : ""
+  		}
   	}
   }
 
@@ -20,13 +23,10 @@ class ContentEpisode extends Component {
 
 	this.props.showLoading(true);
   	api.podcasts().getEpisodesList(lscache, idPodcast).then((infoObj) => {
+  		//Get episode content and parse description to be able to show HTML code
        	infoObj = infoObj.listTrack[idEpisode];
-   		if (infoObj.description != undefined) {
-			if (infoObj.description.indexOf("<![CDATA[") != -1) {
-				infoObj.description = parse(infoObj.description.replace("<![CDATA[", "").replace("]]>", ""));
-			} else {
-				infoObj.description = decodeURI(infoObj.description);
-			}
+   		if (infoObj.description !== undefined) {
+			infoObj.description = parse(infoObj.description.replace("<![CDATA[", "").replace("]]>", ""));
 		}
        this.setState({objEpisode : infoObj});
        this.props.showLoading(false);
@@ -34,20 +34,17 @@ class ContentEpisode extends Component {
   }
 
   render() {
-  	if (this.state.objEpisode != null){
-	  	return (
-	  		<Card>
-	  			<Card.Title><h1>{this.state.objEpisode.title}</h1></Card.Title>
-	  			  {this.state.objEpisode.description}
-	  			  <ReactAudioPlayer
-					  src={this.state.objEpisode.podUrl}
-					  controls
-					/>
-	  		</Card>
-	  	)
-  	} else {
-  		return ("")
-  	}
+  	var objEpisode = this.state.objEpisode;
+  	return (
+  		<Card className="episodeContent">
+  			<Card.Title><h1>{objEpisode.title}</h1></Card.Title>
+  			  <div className="cardText" >{objEpisode.description}</div>
+  			  <div className="cardText" ><ReactAudioPlayer
+				  src={objEpisode.podUrl}
+				  controls
+				/></div>
+  		</Card>
+  	)
   }
 }
  

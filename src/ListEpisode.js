@@ -5,6 +5,7 @@ import {
 import { ListGroup, Table } from 'react-bootstrap';
 import lscache from 'lscache';
 import api from './podcastApi.js';
+import './ListEpisode.css';
 
 class ListEpisode extends Component {
 
@@ -21,6 +22,7 @@ class ListEpisode extends Component {
   	var idPodcast = this.props.match.params.idPodcast;
   	
   	api.podcasts().getEpisodesList(lscache, idPodcast).then((data) => {
+       //get episodeslist and render
        this.setState({trackInfo : data});
        this.props.showLoading(false);
 	});
@@ -29,8 +31,8 @@ class ListEpisode extends Component {
   render() {
   	var trackInfo = this.state.trackInfo;
   	if (trackInfo != null) {
-
-	    const lista = trackInfo.listTrack.map(function(obj, index){
+  		//Render a row for every object
+	    const lista = trackInfo.listTrack.map((obj, index) => {
 	      return [(
 	      	<tr key={index}>
 	      		<td><Link key={index} to={{pathname: `/podcast/${obj.idPod}/episode/${index}`}}>

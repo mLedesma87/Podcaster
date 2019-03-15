@@ -1,0 +1,28 @@
+.card {
+	padding: 10px;
+}
+
+.card hr {
+	margin: 0 0 10px 0;
+}
+
+.episodeContent div {
+	padding: 5px;
+}
+
+.episodeContent audio {
+	width: 100%;
+}
+
+table th {
+	border-top: 0 !important;
+}
+
+.card, .list-group {
+	border: 1px solid #eaeaea;
+	box-shadow: 2px 1px 3px #eaeaea;
+}
+
+.list-group-item {
+	border:none;
+}

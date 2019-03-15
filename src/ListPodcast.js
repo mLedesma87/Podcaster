@@ -13,15 +13,18 @@ class ListPodcast extends Component {
     super();
     this.state = {
       listPodcast : [],
+      filteredListRendered : [],
       filteredList : [],
       isFiltered : false
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
+    //get podcast list from api
     api.podcasts().getPodcastList(lscache)
       .then(data => {
         this.setState({listPodcast : data});
+        this.renderFilteredList(data)
         this.props.showLoading(false);
     });
     
@@ -34,7 +37,8 @@ class ListPodcast extends Component {
         event.target.value.toLowerCase()) !== -1  || item["im:name"]['label'].toLowerCase().search(
         event.target.value.toLowerCase()) !== -1);
     });
-    this.setState({filteredList: updatedList , isFiltered : true});
+    this.setState({isFiltered : true});
+    this.renderFilteredList(updatedList);
   }
 
   renderFilteredList(podcastList) {
@@ -42,6 +46,7 @@ class ListPodcast extends Component {
     let groupByFour = [];
     let row = []
 
+    //Group podcast to show a row every 4 podcast card
     podcastList.forEach((a,id) => {
       id = id + 1;
       row.push(a);
@@ -56,7 +61,7 @@ class ListPodcast extends Component {
     groupByFour.forEach((rowList, index) => {
       const rowGrid = [];
       
-      rowList.map((rowItem, id) => {
+      rowList.forEach((rowItem, id) => {
         rowGrid.push(
           <Col sm={3} key={id}>
            <div className="podcastCover">
@@ -70,31 +75,22 @@ class ListPodcast extends Component {
       col.push(<Row key={index}>{rowGrid}</Row>);
 
     });
-
+    //Render list and keep a copy of the objects in the state variable
+    this.setState({filteredListRendered : col, filteredList : podcastList});
     return col
   }
 
   render() {
     const podcastList = this.state;
-    
-    var filteredPodcastList;
-    if (this.state.isFiltered){
-      filteredPodcastList = this.renderFilteredList(podcastList.filteredList);
-    } else {
-      filteredPodcastList = this.renderFilteredList(podcastList.listPodcast);
-    }
-
-console.log('render lsitpodcast');
-    
     return (
       <Container>
         <Nav className="justify-content-end">
-          <Badge pill variant="primary">{ this.state.isFiltered ? podcastList.filteredList.length : podcastList.listPodcast.length}</Badge>
+          <Badge pill variant="primary">{ podcastList.isFiltered ? podcastList.filteredList.length : podcastList.listPodcast.length}</Badge>
           <Form inline>
             <FormControl type="text" placeholder="Search" className="mr-sm-2" onChange={this.filterList.bind(this)}/>
           </Form>
         </Nav>
-        {filteredPodcastList}
+        {podcastList.filteredListRendered}
       </Container>
       )
   }
